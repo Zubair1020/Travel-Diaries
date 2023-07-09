@@ -2,6 +2,7 @@ import { USER_ACTION_TYPE } from "./user.types";
 
 const USER_INITIAL_STATE = {
   currentUser: null,
+  currentUserDetails: null,
   isLoading: false,
   error: null,
 };
@@ -15,6 +16,8 @@ export const userReducer = (
       return { ...state, isLoading: true };
     case USER_ACTION_TYPE.SET_CURRENT_USER_SUCCESS:
       return { ...state, currentUser: payload, isLoading: false };
+    case USER_ACTION_TYPE.SET_CURRENT_USER_DETAILS:
+      return { ...state, currentUserDetails: payload, isLoading: false };
     case USER_ACTION_TYPE.SET_CURRENT_USER_FAILED:
       return { ...state, error: payload, isLoading: false };
     default:

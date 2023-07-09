@@ -14,13 +14,17 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { StyledCard, StyledCardActions } from "./dairy-item.style";
+import { StyledCard, StyledCardActions, StyledLink } from "./dairy-item.style";
 
-const DairyItem = ({ post, name }) => {
-  const { title, description, image, location, date, user, id } = post;
+const DairyItem = ({ post }) => {
+  const { title, description, image, location, date, user, id, name } = post;
 
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
+  const trimmedDescription =
+    description.length > 75
+      ? `${description.substring(0, 75)}...`
+      : `${description}...`;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -49,7 +53,7 @@ const DairyItem = ({ post, name }) => {
             aria-label="recipe"
             sx={{ bgcolor: "#FFD93D", color: "black" }}
           >
-            {name && name.charAt(0)}
+            {name.charAt(0)}
           </Avatar>
         }
         action={
@@ -72,7 +76,8 @@ const DairyItem = ({ post, name }) => {
           variant="body1"
           color="text.secondary"
         >
-          {description}
+          {trimmedDescription}
+          <StyledLink to={`/diaries/${id}`}> read more</StyledLink>
         </Typography>
       </CardContent>
       {currentUser === user && (

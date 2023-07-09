@@ -4,6 +4,7 @@ import createAction from "../../utils/reducer.utils";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
+  getUserDetails,
   signAuthInWithEmailAndPassword,
 } from "../../utils/firebase.utils";
 
@@ -16,6 +17,9 @@ export const setCurrentUserSuccess = (user) =>
 export const setCurrentUserFailed = (error) =>
   createAction(USER_ACTION_TYPE.SET_CURRENT_USER_FAILED, error);
 
+export const selectCurrentUserDetails = (currentUsrDetails) =>
+  createAction(USER_ACTION_TYPE.SET_CURRENT_USER_DETAILS, currentUsrDetails);
+
 export const setCurrentUserAsync =
   (data, isSignedUp, navigate, reset) => async (dispatch) => {
     try {
@@ -25,14 +29,20 @@ export const setCurrentUserAsync =
           data.email,
           data.password
         );
+        const currentUserDetails = await getUserDetails(user.uid);
+
         dispatch(setCurrentUserSuccess(user.uid));
         createUserDocumentFromAuth(user, data.name);
+        dispatch(selectCurrentUserDetails(currentUserDetails));
       } else {
         const { user } = await signAuthInWithEmailAndPassword(
           data.email,
           data.password
         );
+        const currentUserDetails = await getUserDetails(user.uid);
+
         dispatch(setCurrentUserSuccess(user.uid));
+        dispatch(selectCurrentUserDetails(currentUserDetails));
       }
       navigate("/add");
       reset();

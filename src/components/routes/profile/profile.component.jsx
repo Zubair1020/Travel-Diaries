@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "../../../redux-store/user/user.selector";
+import {
+  selectCurrentUser,
+  selectCurrentUserDetails,
+} from "../../../redux-store/user/user.selector";
 import { setCurrentUserSuccess } from "../../../redux-store/user/user.action";
 import { setTabValue } from "../../../redux-store/user-interaction/userInteraction.action";
 import { useNavigate } from "react-router-dom";
-import { selectPosts } from "../../../redux-store/posts/posts.selector";
-import { getUserDetails } from "../../../utils/firebase.utils";
+import {
+  selectIsPostsLoading,
+  selectPosts,
+} from "../../../redux-store/posts/posts.selector";
 
 import DairyItem from "../../dairy-item/dairy-item.component";
 import Spinner from "../../spinner/spinner.component";
@@ -14,28 +18,16 @@ import { CardContainer } from "../diaries/diaries.style";
 import { StyledBox } from "./profile.style";
 
 const Profile = () => {
-  const currentUserId = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [userDetails, setUserDetails] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    getUserDetails(currentUserId)
-      .then((user) => {
-        setUserDetails(user);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        throw error;
-      });
-  }, []);
 
   const posts = useSelector(selectPosts);
-  const userPosts = posts.filter((post) => post.user === currentUserId);
+  const currentUserId = useSelector(selectCurrentUser);
+  const isPostsLoading = useSelector(selectIsPostsLoading);
+  const currentUserDetails = useSelector(selectCurrentUserDetails);
 
+  const userPosts = posts.filter((post) => post.user === currentUserId);
+  console.log(currentUserDetails);
   const handelClick = () => {
     dispatch(setCurrentUserSuccess(null));
     dispatch(setTabValue(0));
@@ -43,15 +35,15 @@ const Profile = () => {
   };
   return (
     <>
-      {isLoading ? (
+      {isPostsLoading ? (
         <Spinner />
       ) : (
         <>
           <StyledBox>
             <Typography variant="h2">User Profile</Typography>
             <div>
-              <Typography variant="h4">{userDetails.name}</Typography>
-              <Typography variant="h5">{userDetails.email}</Typography>
+              <Typography variant="h4">{currentUserDetails.name}</Typography>
+              <Typography variant="h5">{currentUserDetails.email}</Typography>
               <Button
                 size="large"
                 variant="contained"
@@ -66,7 +58,6 @@ const Profile = () => {
               <DairyItem
                 key={post.id}
                 post={post}
-                name={userDetails.name}
               />
             ))}
           </CardContainer>

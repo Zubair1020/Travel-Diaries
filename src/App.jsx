@@ -12,6 +12,8 @@ import Navigation from "./components/routes/navigation/navigation.component";
 import Profile from "./components/routes/profile/profile.component";
 import Add from "./components/routes/add/add.component";
 import Update from "./components/routes/update/update.component";
+import ReadDairy from "./components/routes/read-dairy/read-dairy.component";
+import PageNotFound from "./components/page-not-found/page-not-found.component";
 
 const App = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -28,42 +30,46 @@ const App = () => {
 
   return (
     <>
+      <Navigation />
       <Routes>
         <Route
           path="/"
-          element={<Navigation />}
-        >
+          element={<Home />}
+        />
+        <Route
+          path="/diaries"
+          element={<Diaries />}
+        />
+        {!isLoggedIn && (
           <Route
-            index
-            element={<Home />}
+            path="/auth"
+            element={<Auth />}
           />
-          <Route
-            path="/diaries"
-            element={<Diaries />}
-          />
-          {!isLoggedIn && (
+        )}
+        {isLoggedIn && (
+          <>
             <Route
-              path="/auth"
-              element={<Auth />}
+              path="/add"
+              element={<Add />}
             />
-          )}
-          {isLoggedIn && (
-            <>
-              <Route
-                path="/add"
-                element={<Add />}
-              />
-              <Route
-                path="/profile"
-                element={<Profile />}
-              />
-              <Route
-                path="/post/:_id"
-                element={<Update />}
-              />
-            </>
-          )}
-        </Route>
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
+            <Route
+              path="/post/:id"
+              element={<Update />}
+            />
+          </>
+        )}
+        <Route
+          path="/diaries/:id"
+          element={<ReadDairy />}
+        />
+        <Route
+          path="*"
+          element={<PageNotFound />}
+        />
       </Routes>
     </>
   );

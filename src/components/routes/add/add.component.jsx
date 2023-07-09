@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "../../../redux-store/user/user.selector";
+import {
+  selectCurrentUser,
+  selectCurrentUserDetails,
+} from "../../../redux-store/user/user.selector";
 import { setTabValue } from "../../../redux-store/user-interaction/userInteraction.action";
 import { addPostById } from "../../../utils/firebase.utils";
 
@@ -13,13 +16,14 @@ const Add = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const currentUser = useSelector(selectCurrentUser);
+  const currentUserId = useSelector(selectCurrentUser);
+  const currentUserDetails = useSelector(selectCurrentUserDetails);
   const dispatch = useDispatch();
 
   const handelSubmit = async (data, reset) => {
     setIsLoading(true);
     try {
-      await addPostById(data, currentUser);
+      await addPostById(data, currentUserId, currentUserDetails.name);
       reset();
       dispatch(setTabValue(1));
       navigate("/diaries");

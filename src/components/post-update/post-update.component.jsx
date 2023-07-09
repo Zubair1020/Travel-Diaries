@@ -84,12 +84,8 @@ const PostUpdate = ({ post, update, onSubmit }) => {
             {...register("description", {
               required: "description is required",
               minLength: {
-                value: 10,
-                message: "description must be at least 10 characters",
-              },
-              maxLength: {
-                value: 150,
-                message: "description can be at most 150 characters",
+                value: 20,
+                message: "description must be at least 20 characters",
               },
             })}
           />

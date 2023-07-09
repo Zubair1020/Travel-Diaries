@@ -12,7 +12,7 @@ import Spinner from "../../spinner/spinner.component";
 import ErrorModal from "../../error-modal/error-modal.component";
 
 const Update = () => {
-  const id = useParams()._id;
+  const id = useParams().id;
   const [error, setError] = useState(null);
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(false);

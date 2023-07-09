@@ -62,8 +62,9 @@ export const createUserDocumentFromAuth = async (userAuth, name) => {
 };
 
 //********** Create Post ************/
-export const addPostById = async (data, uid) => {
+export const addPostById = async (data, uid, userName) => {
   const postData = {
+    name: userName,
     title: data.title,
     description: data.description,
     image: data.imageUrl,
@@ -88,7 +89,7 @@ export const getUserDetails = async (uid) => {
   if (docSnap.exists()) return docSnap.data();
 
   // docSnap.data() will be undefined in this case
-  throw new Error("No such document found!");
+  throw new Error("No such user details found!");
 };
 
 // ************** Get real-time updates
