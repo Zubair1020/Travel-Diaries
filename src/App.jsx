@@ -13,7 +13,6 @@ import Profile from "./components/routes/profile/profile.component";
 import Add from "./components/routes/add/add.component";
 import Update from "./components/routes/update/update.component";
 import ReadDairy from "./components/routes/read-dairy/read-dairy.component";
-import PageNotFound from "./components/page-not-found/page-not-found.component";
 
 const App = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -28,48 +27,50 @@ const App = () => {
     };
   }, []);
 
+  const authenticatedRoutes = (
+    <>
+      <Route
+        path="/add"
+        element={<Add />}
+      />
+      <Route
+        path="/profile"
+        element={<Profile />}
+      />
+      <Route
+        path="/post/:id"
+        element={<Update />}
+      />
+    </>
+  );
+
   return (
     <>
-      <Navigation />
       <Routes>
         <Route
           path="/"
-          element={<Home />}
-        />
-        <Route
-          path="/diaries"
-          element={<Diaries />}
-        />
-        {!isLoggedIn && (
+          element={<Navigation />}
+        >
           <Route
-            path="/auth"
-            element={<Auth />}
+            path="/"
+            element={<Home />}
           />
-        )}
-        {isLoggedIn && (
-          <>
+          <Route
+            path="/diaries"
+            element={<Diaries />}
+          />
+          {!isLoggedIn && (
             <Route
-              path="/add"
-              element={<Add />}
+              path="/auth"
+              element={<Auth />}
             />
-            <Route
-              path="/profile"
-              element={<Profile />}
-            />
-            <Route
-              path="/post/:id"
-              element={<Update />}
-            />
-          </>
-        )}
-        <Route
-          path="/diaries/:id"
-          element={<ReadDairy />}
-        />
-        <Route
-          path="*"
-          element={<PageNotFound />}
-        />
+          )}
+          {isLoggedIn && authenticatedRoutes}
+          <Route
+            path="/diaries/:id"
+            element={<ReadDairy />}
+          />
+        </Route>
       </Routes>
     </>
   );

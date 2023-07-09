@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { setTabValue } from "../../../redux-store/user-interaction/userInteraction.action";
 import { selectTabValue } from "../../../redux-store/user-interaction/userInteraction.selector";
 import { selectIsLoggedIn } from "../../../redux-store/user/user.selector";
@@ -39,7 +39,7 @@ const Navigation = () => {
           </Link>
 
           <StyledTabs
-            value={tabValue} // Update this line
+            value={tabValue}
             onChange={(e, val) => {
               dispatch(setTabValue(val));
               e.preventDefault();
@@ -79,6 +79,7 @@ const Navigation = () => {
           </StyledTabs>
         </StyledToolBar>
       </StyledAppBar>
+      <Outlet />
     </>
   );
 };
